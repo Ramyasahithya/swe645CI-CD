@@ -1,0 +1,73 @@
+docker images
+docker build -t dockerimage name .
+docker run -d -p portwhereyoutorun:exposedport dockerimagename
+#to support multiple architectures:
+docker buildx create --use
+docker buildx build --platform linux/amd64,linux/arm64 -t ramya0602/form:v1.0 --push .
+
+ssh -i "C:/Users/mramy/OneDrive/Desktop/swe-645/Assignment-2/ramya.pem" ubuntu@18.215.75.93
+
+ssh -i "C:/Users/mramy/OneDrive/Desktop/swe-645/Assignment-2/ramya.pem" ubuntu@34.194.6.70
+
+scp -i "C:/Users/mramy/OneDrive/Desktop/swe-645/Assignment-2/ramya.pem" "C:/Users/mramy/OneDrive/Desktop/swe-645/Assignment-2/form.yaml" ubuntu@18.215.75.93:/home/ubuntu/
+sudo su -
+sudo apt-get update
+sudo apt install docker.io
+#for freeing up some space
+docker container prune
+docker image prune
+docker volume prune
+docker system prune -a
+
+docker run -d --restart=unless-stopped \
+  -p 80:80 -p 443:443 \
+  --privileged \
+  rancher/rancher:latest
+
+
+#install rancher:
+sudo docker run --privileged -d --restart=unless-stopped -p 80:80 -p 443:443 rancher/rancher
+#pulls the latest docker image 
+
+fj7m6rns5b5fbs6g5mvvkzdz78w67z7prs6t5twbn2g28wqf44plxf
+
+export KUBECONFIG=/home/ubuntu/cluster-1.yaml
+    2  kubectl get nodes
+    3  mkdir -p ~/.kube
+    4  mv /home/ubuntu/cluster-1.yaml ~/.kube/config
+    5  kubectl config current-context
+    6  cat ~/.kube/config
+    7  kubectl config get-contexts
+    8  sudo kubectl config get-contexts
+    9  kubectl config use-context cluster-1
+   10  sudo chown $(id -u):$(id -g) ~/.kube/config
+   11  kubectl config use-context cluster-1
+   12*
+   13  kubectl config use-context cluster-1
+   14  sudo kubectl config get-contexts
+   15  clear
+   16  kubectl confif current-context
+   17  kubectl config current-context
+   18  kubectl config view
+
+   
+root@ip-172-31-10-115:~# sudo chown $(id -u):$(id -g) ~/.kube/config
+chmod 600 ~/.kube/config
+root@ip-172-31-10-115:~# kubectl config get-contexts
+CURRENT   NAME   CLUSTER   AUTHINFO   NAMESPACE
+root@ip-172-31-10-115:~# echo $KUBECONFIG
+/home/ubuntu/form.yaml
+root@ip-172-31-10-115:~# unset KUBECONFIG
+root@ip-172-31-10-115:~# kubectl config get-contexts
+CURRENT   NAME   CLUSTER   AUTHINFO   NAMESPACE
+*         form   form      form
+root@ip-172-31-10-115:~# kubectl config use-context form
+Switched to context "form".
+root@ip-172-31-10-115:~#
+
+kubectl create secret docker-registry ramyakey \
+  --docker-server=https://index.docker.io/v1/ \
+  --docker-username=mramya0602\
+  --docker-password=Ramya@3006\
+  --docker-email=mramyasahithya@gmail.com
+
