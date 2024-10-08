@@ -35,6 +35,9 @@ pipeline {
         stage('Deploy to Rancher') {
             steps {
                 script {
+
+                    sh 'export PATH=$PATH:/usr/local/bin'
+                    
                     // Replace the IMAGE_TAG placeholder in deployment.yaml with the Jenkins build ID
                     sh "sed -i 's/\\\$IMAGE_TAG/${env.IMAGE_TAG}/g' deployment.yaml"
 
