@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_CREDENTIALS = credentials('docker-id')  // Ensure Docker credentials ID is correct
+        DOCKER_CREDENTIALS = credentials('Docker-id')  // Ensure Docker credentials ID is correct
     }
 
     stages {
@@ -32,18 +32,6 @@ pipeline {
                     docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS) {
                         image.push()  // Push the Docker image
                     }
-                }
-            }
-        }
-
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    sh '''
-                        echo "Deploying to Kubernetes"
-                        kubectl --kubeconfig=$KUBECONFIG_CREDENTIALS apply -f deployment.yaml
-                        kubectl --kubeconfig=$KUBECONFIG_CREDENTIALS apply -f service.yaml
-                    '''
                 }
             }
         }
