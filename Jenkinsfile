@@ -10,13 +10,11 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Log in to Docker using credentials from Jenkins
                     withCredentials([usernamePassword(credentialsId: 'Docker-id', passwordVariable: 'DOCKER_PSW', usernameVariable: 'DOCKER_USR')]) {
                         sh 'echo $DOCKER_PSW | docker login -u $DOCKER_USR --password-stdin'
                     }
 
-                    // Build the Docker image and tag it with the Jenkins build ID
-                    image = docker.build("ramya0602/form:${IMAGE_TAG}")
+                    image = docker.build("ramya0602/form:${env.IMAGE_TAG}")
                 }
             }
         }
@@ -24,7 +22,6 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Push the Docker image to the registry
                     docker.withRegistry('https://index.docker.io/v1/', 'Docker-id') {
                         image.push()
                     }
@@ -32,21 +29,21 @@ pipeline {
             }
         }
 
-        stage('Deploy to Rancher') {
+        stage('Update Deployment YAML and Deploy') {
             steps {
                 script {
-
-                    sh 'export PATH=$PATH:/usr/local/bin'
-                    
-                    // Replace the IMAGE_TAG placeholder in deployment.yaml with the Jenkins build ID
+                    // Ensure that ${IMAGE_TAG} in deployment.yaml is replaced with the actual image tag
                     sh "sed -i 's/\\\$IMAGE_TAG/${env.IMAGE_TAG}/g' deployment.yaml"
 
-                    // Apply deployment.yaml to update the Kubernetes deployment with the new image
+                    // Debugging step: Display the content of deployment.yaml after sed substitution
+                    sh 'cat deployment.yaml'
+
+                    // Apply the updated deployment.yaml to Kubernetes (Rancher)
                     sh '''
                     kubectl --kubeconfig=$KUBECONFIG_CREDENTIALS apply -f deployment.yaml
                     '''
 
-                    // Apply service.yaml to ensure the service is created/updated
+                    // Optionally, apply the service.yaml if needed
                     sh '''
                     kubectl --kubeconfig=$KUBECONFIG_CREDENTIALS apply -f service.yaml
                     '''
