@@ -38,13 +38,14 @@ pipeline {
             steps {
                 script {
                     sh '''
+                        echo "Using kubeconfig:"
+                        echo $KUBECONFIG_CREDENTIALS
                         kubectl --kubeconfig=$KUBECONFIG_CREDENTIALS apply -f deployment.yaml
                         kubectl --kubeconfig=$KUBECONFIG_CREDENTIALS apply -f service.yaml
                     '''
                 }
-            }
         }
-    }
+    }   
 
     post {
         success {
