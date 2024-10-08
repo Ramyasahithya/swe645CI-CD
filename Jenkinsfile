@@ -1,18 +1,10 @@
 pipeline {
     agent any
     environment {
-        DOCKER_CREDENTIALS = credentials('docker-id')  // Ensure Docker credentials ID is correct
+        DOCKER_CREDENTIALS = credentials('Docker-id')  // Ensure this ID is correct
     }
 
     stages {
-        stage('Checkout Code') {
-            steps {
-                git branch: 'main', 
-                    credentialsId: 'git-credentials',  // Ensure Git credentials ID is correct
-                    url: 'https://github.com/Ramyasahithya/swe645CI-CD.git'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
@@ -28,7 +20,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Push the image to Docker Hub with the registry login using the credentials
+                    // Push the image to Docker Hub using the credentials
                     docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS) {
                         image.push()  // Push the Docker image
                     }
