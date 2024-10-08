@@ -44,8 +44,9 @@ pipeline {
                         kubectl --kubeconfig=$KUBECONFIG_CREDENTIALS apply -f service.yaml
                     '''
                 }
+            }
         }
-    }   
+    }
 
     post {
         success {
