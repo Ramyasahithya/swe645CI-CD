@@ -3,6 +3,7 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS = credentials('Docker-id')  // Docker credentials
         KUBECONFIG_CREDENTIALS = credentials('kubeconfig-id')  // Kubernetes credentials
+        IMAGE_TAG = "${env.BUILD_ID}"  // Set IMAGE_TAG to the Jenkins build ID
     }
 
     stages {
@@ -15,7 +16,7 @@ pipeline {
                     }
 
                     // Build the Docker image and tag it with the Jenkins build ID
-                    image = docker.build("ramya0602/form:${env.BUILD_ID}")
+                    image = docker.build("ramya0602/form:${IMAGE_TAG}")
                 }
             }
         }
@@ -35,7 +36,7 @@ pipeline {
             steps {
                 script {
                     // Replace the IMAGE_TAG placeholder in deployment.yaml with the Jenkins build ID
-                    sh "sed -i 's#\\${IMAGE_TAG}#${env.BUILD_ID}#' deployment.yaml"
+                    sh "sed -i 's#\\${IMAGE_TAG}#${env.IMAGE_TAG}#' deployment.yaml"
 
                     // Apply deployment.yaml to update the Kubernetes deployment with the new image
                     sh '''
