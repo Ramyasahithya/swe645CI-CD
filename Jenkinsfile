@@ -36,7 +36,7 @@ pipeline {
             steps {
                 script {
                     // Replace the IMAGE_TAG placeholder in deployment.yaml with the Jenkins build ID
-                    sh "sed -i 's#\\${IMAGE_TAG}#${env.IMAGE_TAG}#' deployment.yaml"
+                    sh "sed -i 's/\\${IMAGE_TAG}/${env.IMAGE_TAG}/g' deployment.yaml"
 
                     // Apply deployment.yaml to update the Kubernetes deployment with the new image
                     sh '''
