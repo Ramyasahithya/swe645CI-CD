@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_CREDENTIALS = credentials('Docker-id')  // Ensure Docker credentials ID is correct
+        DOCKER_CREDENTIALS = credentials('docker-id')  // Ensure Docker credentials ID is correct
     }
 
     stages {
