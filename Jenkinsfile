@@ -8,9 +8,8 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                // Use git with credentials and specify the correct branch (main)
                 git branch: 'main', 
-                    credentialsId: 'git-credentials',  // Add your Git credentials here
+                    credentialsId: 'git-credentials',  
                     url: 'https://github.com/Ramyasahithya/swe645CI-CD.git'
             }
         }
