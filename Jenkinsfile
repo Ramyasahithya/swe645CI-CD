@@ -32,15 +32,15 @@ pipeline {
         stage('Update Deployment YAML and Deploy') {
             steps {
                 script {
-                    // Ensure that ${IMAGE_TAG} in deployment.yaml is replaced with the actual image tag
-                    sh "sed -i 's/\\\$IMAGE_TAG/${env.IMAGE_TAG}/g' deployment.yaml"
+                    // Use envsubst to substitute the IMAGE_TAG into deployment.yaml
+                    sh 'envsubst < deployment.yaml > deployment-updated.yaml'
 
-                    // Debugging step: Display the content of deployment.yaml after sed substitution
-                    sh 'cat deployment.yaml'
+                    // Debugging step: Show the content of deployment-updated.yaml after envsubst
+                    sh 'cat deployment-updated.yaml'
 
                     // Apply the updated deployment.yaml to Kubernetes (Rancher)
                     sh '''
-                    kubectl --kubeconfig=$KUBECONFIG_CREDENTIALS apply -f deployment.yaml
+                    kubectl --kubeconfig=$KUBECONFIG_CREDENTIALS apply -f deployment-updated.yaml
                     '''
 
                     // Optionally, apply the service.yaml if needed
