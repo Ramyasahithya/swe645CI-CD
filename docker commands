@@ -10,6 +10,9 @@ ssh -i "C:/Users/mramy/OneDrive/Desktop/swe-645/Assignment-2/ramya.pem" ubuntu@1
 ssh -i "C:/Users/mramy/OneDrive/Desktop/swe-645/Assignment-2/ramya.pem" ubuntu@34.194.6.70
 
 scp -i "C:/Users/mramy/OneDrive/Desktop/swe-645/Assignment-2/ramya.pem" "C:/Users/mramy/OneDrive/Desktop/swe-645/Assignment-2/form.yaml" ubuntu@18.215.75.93:/home/ubuntu/
+
+scp -i "C:/Users/mramy/OneDrive/Desktop/swe-645/Assignment-2/ramya.pem" "C:/Users/mramy/OneDrive/Desktop/swe-645/Assignment-2/form.yaml" ubuntu@18.215.75.93:/home/ubuntu/
+
 sudo su -
 sudo apt-get update
 sudo apt install docker.io
@@ -31,26 +34,11 @@ sudo docker run --privileged -d --restart=unless-stopped -p 80:80 -p 443:443 ran
 
 fj7m6rns5b5fbs6g5mvvkzdz78w67z7prs6t5twbn2g28wqf44plxf
 
-export KUBECONFIG=/home/ubuntu/cluster-1.yaml
-    2  kubectl get nodes
-    3  mkdir -p ~/.kube
-    4  mv /home/ubuntu/cluster-1.yaml ~/.kube/config
-    5  kubectl config current-context
-    6  cat ~/.kube/config
-    7  kubectl config get-contexts
-    8  sudo kubectl config get-contexts
-    9  kubectl config use-context cluster-1
-   10  sudo chown $(id -u):$(id -g) ~/.kube/config
-   11  kubectl config use-context cluster-1
-   12*
-   13  kubectl config use-context cluster-1
-   14  sudo kubectl config get-contexts
-   15  clear
-   16  kubectl confif current-context
-   17  kubectl config current-context
-   18  kubectl config view
-
-   
+mkdir -p ~/.kube
+mv /home/ubuntu/form.yaml ~/.kube/config
+cat ~/.kube/config
+kubectl config get-contexts
+sudo kubectl config get-contexts
 root@ip-172-31-10-115:~# sudo chown $(id -u):$(id -g) ~/.kube/config
 chmod 600 ~/.kube/config
 root@ip-172-31-10-115:~# kubectl config get-contexts
@@ -64,6 +52,13 @@ CURRENT   NAME   CLUSTER   AUTHINFO   NAMESPACE
 root@ip-172-31-10-115:~# kubectl config use-context form
 Switched to context "form".
 root@ip-172-31-10-115:~#
+
+#check the application running on the node port:
+root@ip-172-31-10-115:/home/ubuntu# kubectl get service
+NAME           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                        AGE
+form-service   NodePort    10.43.134.130   <none>        8080:30977/TCP,443:30112/TCP   18d
+kubernetes     ClusterIP   10.43.0.1       <none>        443/TCP                        18d
+http://ec2-18-215-75-93.compute-1.amazonaws.com:30977/form.html
 
 kubectl create secret docker-registry ramyakey \
   --docker-server=https://index.docker.io/v1/ \
