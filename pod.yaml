@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+  labels: 
+    app: pod
+spec:
+  containers:
+  - name: test-pod-container
+    image: ramya0602/form:v1.0
+    ports:
+      containerPort: 8080
+
+================================================================
+
+apiVersion: v1
+kind: ReplicaSet
+metadata:
+  name: test-replica-set
+  labels:
+    app: test
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test-pod
+  template:
+      metadata:
+        label: test-pod
+  spec:
+    containers:
+    - name: test-pod-container
+      image: ramya0602/form:v1.0
+=============
+
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: test-deployment
+  labels:
+    app: test
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels: 
+        app: test
+    spec:
+      containers:
+      - name: test-deployment
+        image: ramya0602/form:v1.0
+        ports:
+        - containerPort: 8080
+
+============
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-service
+  labels:
+    app: test
+spec: 
+  selector:
+    app: test
+  type: NodePort
+  ports:
+  -port: 8080
+    protocol: RCP
+    targetPort: 8080
+
+
+
+cidr : classes inter domain routing: 
+  > helps in allocation of ip addresses
